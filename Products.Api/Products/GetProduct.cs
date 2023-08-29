@@ -23,7 +23,7 @@ public class GetProduct
 
         public async Task<ProductResponse> Handle(Query request, CancellationToken cancellationToken)
         {
-            var product = _dbContext.Products.AsNoTracking().FirstOrDefault(p => p.Id == request.Id);
+            var product = await _dbContext.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (product is null)
             {
