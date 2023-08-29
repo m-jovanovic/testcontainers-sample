@@ -27,9 +27,33 @@ if (app.Environment.IsDevelopment())
 
 app.MapPost("api/products", async (CreateProductRequest request, ISender sender) =>
 {
-    await sender.Send(request.Adapt<CreateProduct>());
+    var productId = await sender.Send(request.Adapt<CreateProduct.Command>());
 
-    return Results.Ok();
+    return Results.Ok(productId);
+});
+
+app.MapGet("api/products/{productId}", async (Guid productId, ISender sender) =>
+{
+    var productResponse = await sender.Send(new GetProduct.Query { Id = productId });
+
+    return Results.Ok(productResponse);
+});
+
+app.MapPut("api/products/{productId}", async (Guid productId, UpdateProductRequest request, ISender sender) =>
+{
+    await sender.Send(request.Adapt<UpdateProduct.Command>() with
+    {
+        Id = productId
+    });
+
+    return Results.NoContent();
+});
+
+app.MapDelete("api/products/{productId}", async (Guid productId, ISender sender) =>
+{
+    await sender.Send(new DeleteProduct.Command{ Id = productId });
+
+    return Results.NoContent();
 });
 
 app.UseHttpsRedirection();
