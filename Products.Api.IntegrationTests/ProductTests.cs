@@ -1,6 +1,4 @@
-﻿using Dapper;
-using Products.Api.Entities;
-using Products.Api.Products;
+﻿using Products.Api.Products;
 
 namespace Application.IntegrationTests;
 
