@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  products.api:
+    image: ${DOCKER_REGISTRY-}productsapi
+    container_name: Products.Api
+    build:
+      context: .
+      dockerfile: Products.Api/Dockerfile
+
+  products-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: Products.Db
+    volumes:
+        - ./.containers/database:/var/opt/mssql/data
+    ports:
+        - "1433:1433"
+    environment:
+        ACCEPT_EULA: "Y"
+        SA_PASSWORD: "Strong_password_123!"
